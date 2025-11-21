@@ -12,6 +12,7 @@ import android.media.ToneGenerator
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.kognitivist.trainingtracker.R
 import com.kognitivist.trainingtracker.app.App
@@ -145,7 +146,7 @@ class IntervalService : Service() {
 			val tokenSource = CancellationTokenSource()
 
 			fused.getCurrentLocation(
-				com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
+				Priority.PRIORITY_HIGH_ACCURACY,
 				tokenSource.token
 			)
 				.addOnSuccessListener { location ->
