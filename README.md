@@ -5,3 +5,4 @@
 - для использования АПИ либы карт
 - написания расшрений
 - настроке сервиса
+APK тут: https://github.com/Kognitivist/TrainingTracker/tree/main/app/build/outputs/apk/debug
