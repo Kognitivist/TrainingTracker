@@ -1,59 +1,75 @@
 package com.kognitivist.trainingtracker.ui.screens.start
 
-import android.R.attr.text
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 
 @Composable
 fun StartScreen(
 	state: StartScreenState,
-	navToTrainingScreen:()-> Unit,
-	loadIntervals:(Int, (Boolean)-> Unit )->Unit
+	loadIntervals:()->Unit,
+	changeState:(StartScreenState)-> Unit
 ) {
-	var textFieldValue by rememberSaveable { mutableStateOf("68") }
-	var isLoading by rememberSaveable { mutableStateOf(false) }
-
 
 	Column(
-		modifier = Modifier.fillMaxSize().padding(16.dp),
-		verticalArrangement = Arrangement.Center
+		modifier = Modifier.fillMaxSize().imePadding().padding(16.dp),
+		verticalArrangement = Arrangement.Center,
+		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 		OutlinedTextField(
-			value = state.id.toString(),
-			onValueChange = { it.toIntOrNull()?.let { text -> textFieldValue = text } },
-			modifier = Modifier.fillMaxWidth()
+			value = state.id,
+			onValueChange = { changeState(state.copy(id = it)) },
+			modifier = Modifier.fillMaxWidth(),
+			keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
 		)
 		Spacer(Modifier.height(16.dp))
 		Button(
-			onClick = {
-				isLoading = true
-				textFieldValue.toIntOrNull()?.let {
-					loadIntervals(it){isSuccess->
-						isLoading = false
-						if (isSuccess) navToTrainingScreen()
-					}
+			onClick = loadIntervals,
+			enabled = !state.isLoading,
+			modifier = Modifier.height(48.dp)
+		) {
+			Box(
+				contentAlignment = Alignment.Center
+			){
+				Text("Загрузить")
+				if (state.isLoading){
+					CircularProgressIndicator(modifier = Modifier.size(32.dp))
 				}
 			}
+		}
+		Spacer(Modifier.height(16.dp))
+		Row(
+			verticalAlignment = Alignment.CenterVertically
 		) {
-			Text("Загрузить")
+			Checkbox(
+				checked = state.isMock,
+				onCheckedChange = {
+					changeState(state.copy(isMock = it))
+				}
+			)
+			Spacer(Modifier.width(16.dp))
+			Text("Mock")
 		}
 	}
 }
@@ -61,5 +77,6 @@ fun StartScreen(
 @Stable
 data class StartScreenState(
 	val isLoading: Boolean = false,
-	val id: Int = 68
+	val id: String = "68",
+	val isMock: Boolean = false
 )

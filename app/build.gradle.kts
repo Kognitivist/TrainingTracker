@@ -56,10 +56,17 @@ dependencies {
 	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 	debugImplementation(libs.androidx.compose.ui.tooling)
 	debugImplementation(libs.androidx.compose.ui.test.manifest)
+	implementation(libs.material.icons.extended)
 
 	implementation(libs.retrofit)
 	implementation(libs.converter.gson)
 	implementation(libs.okhttp)
+	implementation(libs.logging.interceptor)
+	implementation(libs.gson)
+	implementation(libs.androidx.datastore.preferences)
+	implementation(libs.androidx.datastore.preferences.core)
+	implementation(libs.osmdroid.android)
+	implementation(libs.play.services.location)
 
 	implementation(libs.hilt.android)
 	implementation(libs.androidx.hilt.navigation.compose)
